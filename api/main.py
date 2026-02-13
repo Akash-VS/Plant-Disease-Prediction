@@ -5,6 +5,7 @@ import numpy as np
 from io import BytesIO
 from PIL import Image
 import tensorflow as tf
+import os
 
 app = FastAPI()
 
@@ -18,7 +19,13 @@ app.add_middleware(
 )
 
 # Load the model
-MODEL = tf.keras.models.load_model("C:/Users/AKASH/Desktop/models/1.keras")
+#MODEL = tf.keras.models.load_model("C:/Users/AKASH/Desktop/models/1.keras")
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "../model/models/1.keras")
+
+MODEL = tf.keras.models.load_model(MODEL_PATH)
+
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
 def read_file_as_image(data) -> np.ndarray:
@@ -44,5 +51,5 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": f"Error during prediction: {e}"}
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000)
+#if __name__ == "__main__":
+   # uvicorn.run(app, host="localhost", port=8000)
